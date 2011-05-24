@@ -8,10 +8,12 @@ var testData = {
 };
 
 var start = function () {
+    // Cache elements for updating later
     elements.hps = document.getElementById("hps");
     elements.current = document.getElementById("current");
     elements.answer = document.getElementById("answer");
-    
+
+    // Create worker thread
     var thread = new Worker("Worker.js");
 
     thread.onmessage = messageHandler;

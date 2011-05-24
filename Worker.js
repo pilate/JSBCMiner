@@ -3,10 +3,9 @@ importScripts('sha256.js');
 var work = function (data, target) {
     var start_time = new Date().getTime();
     var blk_hdr = bReverse(data.substr(0,152));
-    target = bReverse(dwReverse(target));
-    postMessage(target);
 
-    //var nonce = 879340;
+    target = bReverse(dwReverse(target));
+
     var nonce = 0;
     while (++nonce) {
         // Reverse nonce
@@ -19,7 +18,8 @@ var work = function (data, target) {
         var hash1 = SHA256_hash(myBin(final_str));
         var hash2 = SHA256_hash(myBin(hash1));
 
-        //if (hash2.substr(64-8) === "00000000") {
+        // Test for solution
+        // if (hash2.substr(64-8) === "00000000") {
         if (bReverse(dwReverse(hash2)) < target) {
             postMessage({
                 type:"solve",
@@ -28,9 +28,12 @@ var work = function (data, target) {
             break;
         }
 
+        // Test for last nonce
         if (nonce > 0xffffffff) {
             break;
         }
+
+        // Status report for browser
         if (nonce % 10000 == 0) {
             var total_time = new Date().getTime() - start_time;
             
